@@ -18,3 +18,4 @@ Student ID: 301910606
 - portfolio-5 - distributed-cloud: distributed or cloud database exercise.
 
 Note: Each folder will house its distinct scripts, notes and execution proof.
+
