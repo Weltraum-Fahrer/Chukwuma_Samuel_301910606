@@ -22,7 +22,7 @@ My case study records students, courses, offerings, results.
 | offerings | Represents a course scheduled for a specific term, keeping term and date details separate from catalog course data. |
 | results | Stores one student's outcome for an offering; score and recording time belong here, while student, offering, and course attributes are not duplicated. |
 
-## students
+## Students
 
 | Field | Type | Key | Required |
 | --- | --- | --- | --- |
@@ -31,7 +31,7 @@ My case study records students, courses, offerings, results.
 | active | BOOLEAN |  | Yes |
 
 
-## courses
+## Courses
 
 | Field | Type | Key | Required |
 | --- | --- | --- | --- |
@@ -40,7 +40,7 @@ My case study records students, courses, offerings, results.
 | title | TEXT |  | Yes |
 - Unique key: (course_code).
 
-## offerings
+## Offerings
 
 | Field | Type | Key | Required |
 | --- | --- | --- | --- |
@@ -52,7 +52,7 @@ My case study records students, courses, offerings, results.
 - course_id → courses.course_id
 - Unique key: (course_id, term_code).
 
-## results
+## Results
 
 | Field | Type | Key | Required |
 | --- | --- | --- | --- |
@@ -65,7 +65,7 @@ My case study records students, courses, offerings, results.
 - offering_id → offerings.offering_id
 - Unique key: (student_id, offering_id).
 
-## Relationships and business rules
+## Relationships and Business Rules
 
 - Each course code identifies at most one catalog course.
 - Every offering references an existing course through course_id.
