@@ -4,20 +4,20 @@ My case study records students, courses, offerings, results.
 
 ## Users
 
-- Students reviewing their recorded results
-- Academic staff recording and correcting results
+- Students reviewing their recorded results for reference sake.
+- Academic staff recording and correcting results due to oversight.
 
 ## Main operations
 
-- Record a student's result for a course offering
-- Review results by student, course, and term
-- Summarize result counts and average scores
+- Record a student's result for a course offering.
+- Review results by student, course, and term.
+- Summarize result counts and average scores.
 
 ## Entities
 
 | Entity | Information stored |
 | --- | --- |
-| students | Stores a synthetic student surrogate key and minimal enrollment status, without names or real-world identifiers. |
+| students | Stores a synthetic student surrogate key and minimal enrollment status, without actual names or real-world identifiers. |
 | courses | Stores catalog details shared by term-specific offerings. |
 | offerings | Represents a course scheduled for a specific term, keeping term and date details separate from catalog course data. |
 | results | Stores one student's outcome for an offering; score and recording time belong here, while student, offering, and course attributes are not duplicated. |
