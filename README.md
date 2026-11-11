@@ -2,7 +2,7 @@
 
 Samuel Chukwuma · Student ID 301910606
 
-The portfolio uses fictional records for University/Student Result Portal.
+The portfolio uses simulated records for University/Student Result Portal.
 
 - [Portfolio 1](portfolio-1-database-design/)
 - [Portfolio 2](portfolio-2-query-optimisation/)
