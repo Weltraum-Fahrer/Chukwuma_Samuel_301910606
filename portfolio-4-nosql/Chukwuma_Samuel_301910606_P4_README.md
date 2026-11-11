@@ -1,6 +1,6 @@
 # Portfolio 4 — NoSQL and Advanced Data Models
 
-I used MongoDB collection result_events for result_recorded and result_corrected events. These are fictional event examples based on results, students, offerings.
+I used MongoDB collection result_events for result_recorded and result_corrected events. These are simulated event examples based on results, students, offerings.
 
 ## Document model
 
