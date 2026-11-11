@@ -1,4 +1,4 @@
-# University/Student Result Portal — normalisation
+# University/Student Result Portal — Normalisation
 
 The example uses the saved sample records. The full set of fields is in the design and schema.
 
