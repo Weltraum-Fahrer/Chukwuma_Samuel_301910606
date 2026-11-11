@@ -1,54 +1,54 @@
--- Run these deliberately invalid statements one at a time, outside a transaction.
--- Each should fail at the named constraint; the sample rows should remain unchanged.
+-- Executing these queries individually without a transaction block so an expected failure doesn't abort the rest of the script in Postgres.
+-- Using 500-series IDs for test inputs to clearly separate negative test cases from existing seed data.
 
--- 1. students pk violation. Expected: pk_students, SQLSTATE 23505.
+-- Re-using existing student ID 101 to verify the primary key prevents duplicate record creation.
 INSERT INTO portfolio."students" ("student_id", "enrolled_on", "active")
 VALUES (101, '2026-02-01', TRUE);
 
--- 2. students not null violation. Expected: enrolled_on, SQLSTATE 23502.
+-- Passing NULL for enrolled_on to make sure mandatory field checks happen at the database level rather than relying solely on application code.
 INSERT INTO portfolio."students" ("student_id", "enrolled_on", "active")
 VALUES (509, NULL, TRUE);
 
--- 3. courses pk violation. Expected: pk_courses, SQLSTATE 23505.
+-- Testing a primary key collision on course ID 201 to ensure reference tables maintain strict unique identifiers.
 INSERT INTO portfolio."courses" ("course_id", "course_code", "title")
 VALUES (201, 'SYN103', 'Synthetic Alternate');
 
--- 4. courses unique violation. Expected: uq_courses_0, SQLSTATE 23505.
+-- Using duplicate code 'SYN101' with a fresh ID to verify unique business keys are enforced independently of primary keys.
 INSERT INTO portfolio."courses" ("course_id", "course_code", "title")
 VALUES (501, 'SYN101', 'Synthetic Duplicate Code');
 
--- 5. offerings pk violation. Expected: pk_offerings, SQLSTATE 23505.
+-- Attempting duplicate ID 301 to ensure surrogate key rules hold for schedule records.
 INSERT INTO portfolio."offerings" ("offering_id", "course_id", "term_code", "starts_on", "ends_on")
 VALUES (301, 202, '2028FA', '2028-09-01', '2028-12-15');
 
--- 6. offerings unique violation. Expected: uq_offerings_0, SQLSTATE 23505.
+-- Scheduling course 201 in term 2026FA again to make sure the composite key prevents double-booking a course in the same term.
 INSERT INTO portfolio."offerings" ("offering_id", "course_id", "term_code", "starts_on", "ends_on")
 VALUES (502, 201, '2026FA', '2026-09-02', '2026-12-15');
 
--- 7. offerings foreign key violation. Expected: fk_offerings_0, SQLSTATE 23503.
+-- Passing non-existent course ID 999999 to test that foreign key constraints block orphan offerings.
 INSERT INTO portfolio."offerings" ("offering_id", "course_id", "term_code", "starts_on", "ends_on")
 VALUES (503, 999999, '2028SP', '2028-01-10', '2028-05-20');
 
--- 8. offerings check violation. Expected: offering_dates_ordered, SQLSTATE 23514.
+-- Putting an end date before a start date to verify the table's CHECK constraint catches timeline logic errors.
 INSERT INTO portfolio."offerings" ("offering_id", "course_id", "term_code", "starts_on", "ends_on")
 VALUES (507, 201, '2029FA', '2029-12-16', '2029-09-01');
 
--- 9. results pk violation. Expected: pk_results, SQLSTATE 23505.
+-- Re-using result ID 401 to ensure unique key enforcement holds on grade junction records.
 INSERT INTO portfolio."results" ("result_id", "student_id", "offering_id", "score", "recorded_at")
 VALUES (401, 101, 302, 80, '2027-05-22T09:00:00Z');
 
--- 10. results unique violation. Expected: uq_results_0, SQLSTATE 23505.
+-- Entering a second grade for student 101 in offering 301 to confirm composite unique rules stop duplicate grade records for the same attempt.
 INSERT INTO portfolio."results" ("result_id", "student_id", "offering_id", "score", "recorded_at")
 VALUES (504, 101, 301, 80, '2026-12-17T09:00:00Z');
 
--- 11. results student foreign key violation. Expected: fk_results_0, SQLSTATE 23503.
+-- Using invalid student ID 999999 to confirm grades can't be logged for non-existent users.
 INSERT INTO portfolio."results" ("result_id", "student_id", "offering_id", "score", "recorded_at")
 VALUES (505, 999999, 302, 80, '2027-05-22T09:00:00Z');
 
--- 12. results offering foreign key violation. Expected: fk_results_1, SQLSTATE 23503.
+-- Using invalid offering ID 999999 to verify grades can only be tied to real course offerings.
 INSERT INTO portfolio."results" ("result_id", "student_id", "offering_id", "score", "recorded_at")
 VALUES (506, 101, 999999, 80, '2027-05-22T09:00:00Z');
 
--- 13. results check violation. Expected: result_score_range, SQLSTATE 23514.
+-- Entering a score of 101 to verify range limits prevent out-of-bounds numbers from hitting the database.
 INSERT INTO portfolio."results" ("result_id", "student_id", "offering_id", "score", "recorded_at")
 VALUES (508, 101, 302, 101, '2027-05-22T09:00:00Z');
