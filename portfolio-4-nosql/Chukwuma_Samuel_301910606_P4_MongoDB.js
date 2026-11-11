@@ -1,12 +1,16 @@
-// Run once in mongosh against a fresh exercise database.
-// These records are fictional events for the case study.
+// These records represent a simulated event-sourced architecture for the case study.
 (async function () {
+  // Explicitly switching to 'portfolio_nosql' isolates this document workload from any relational data, avoiding accidental cross-contamination.
   db = db.getSiblingDB('portfolio_nosql');
+  
+  // Implementing a fail-fast mechanism to guarantee a clean slate. If the collection already exists, we abort to prevent appending duplicate 
+  // test data which would upset our later aggregation results.
   if ((await db.getCollectionNames()).includes("result_events")) {
     throw new Error('The exercise collection already exists. Use a fresh database.');
   }
 
-  // The validator checks the stable event fields while details can vary.
+  // MongoDB is schema-less by default, but by applying a JSON Schema Validator provides critical data governance. This ensures all documents strictly 
+  // adhere to our event-sourcing contract (e.g; strict enums, mandatory source features).
   await db.createCollection("result_events", {
     validator: {
     "$jsonSchema": {
@@ -24,10 +28,12 @@
         ],
         "properties": {
             "_id": {
+                // Enforcing a string ID instead of ObjectId to support custom event IDs.
                 "bsonType": "string",
                 "minLength": 1
             },
             "schemaVersion": {
+                // Locking schemaVersion to '1' enables future schema migrations.
                 "enum": [
                     1
                 ]
@@ -38,6 +44,7 @@
                 ]
             },
             "eventType": {
+                // Restricting events to known business domain actions.
                 "bsonType": "string",
                 "enum": [
                     "result_recorded",
@@ -45,6 +52,7 @@
                 ]
             },
             "occurredAt": {
+                // Forcing BSON date type prevents silent bugs caused by string-based timestamps.
                 "bsonType": "date"
             },
             "source": {
@@ -78,15 +86,19 @@
                 "bsonType": "object"
             },
             "details": {
+                // 'details' is left as an unstructured object to allow flexible, 
+                // event-specific metadata (like UI channels or rubric notes) to evolve.
                 "bsonType": "object"
             }
         }
     }
 },
+    // Setting validation to strict/error blocks invalid writes at the database layer.
     validationLevel: 'strict', validationAction: 'error'
   });
 
-  // Insert the four example events and show their IDs.
+  // Using insertMany for bulk ingestion minimizes network round-trips. The document structure embraces NoSQL denormalization: embedding related 'offerings' 
+  // and 'students' directly into the event payload eliminates the need for expensive joins on read.
   printjson(await db.getCollection("result_events").insertMany([
     {
         "_id": "event_000001",
@@ -317,21 +329,35 @@
         }
     }
 ]));
+
+  // Creating a compound index optimizes the most common chronological event stream queries. Sorting eventType ascending and occurredAt descending allows 
+  // us to quickly pull "the most recent events of a specific type".
   await db.getCollection("result_events").createIndex({eventType: 1, occurredAt: -1}, {name: 'event_type_time'});
 
-  // 1. Find the first sample event type (up to five documents).
+  // Using '.limit(5)' in all test queries defensively prevents cursor exhaustion and excessive memory consumption if the dataset grows.
+  
+  // 1. Find the first sample event type. Demonstrates basic equality filtering.
   printjson(await db.getCollection("result_events").find({"eventType":"result_recorded"}).sort({_id:1}).limit(5).toArray());
 
-  // 2. Find events for the first source record using nested key fields (up to five).
+  // 2. Querying "source.key.result_id" demonstrates NoSQL's native capability 
+  // to index and filter across deeply nested object properties using dot notation.
   printjson(await db.getCollection("result_events").find({"source.key.result_id":401}).sort({_id:1}).limit(5).toArray());
 
-  // 3. Find events in the sample time range using a MongoDB Date filter (up to five).
+  // 3. Time-boxing via $gte and $lt operators enables efficient historical window retrieval.
   printjson(await db.getCollection("result_events").find({"occurredAt":{"$gte":ISODate("2030-01-01T10:00:00Z"), "$lt":ISODate("2030-01-01T11:00:00Z")}}).sort({_id:1}).limit(5).toArray());
 
-  // 4. Count documents for each event type.
+  // 4. Utilizing the Aggregation Framework ($group) serves as the NoSQL equivalent 
+  // of a SQL GROUP BY, enabling server-side telemetry metrics (counting by eventType).
   printjson(await db.getCollection("result_events").aggregate([{"$group":{"_id":"$eventType", "documentCount":{"$sum":1}}}, {"$sort":{"_id":1}}]).toArray());
 
-  // A date stored as text should be rejected by the validator.
+
+  // ============================================================================
+  // NEGATIVE TESTING (Proving our constraints work)
+  // ============================================================================
+
+  // We intentionally inject a string ('not-a-date') into a Date field.
+  // This verifies our strict JSON Schema actually rejects bad data payloads instead 
+  // of silently corrupting the database.
   try {
     await db.getCollection("result_events").insertOne({...{
     "_id": "event_000001",
@@ -389,7 +415,8 @@
 }, _id: 'invalid_date_example', occurredAt: 'not-a-date'});
   } catch (error) { print('Invalid date error: ' + error.code); }
 
-  // Reusing an event ID should be rejected by the unique _id index.
+  // Attempting to insert a pre-existing '_id' verifies that 
+  // MongoDB's implicit primary key uniqueness constraint successfully blocks duplicates.
   try { await db.getCollection("result_events").insertOne({
     "_id": "event_000001",
     "schemaVersion": 1,
