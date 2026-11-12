@@ -222,7 +222,7 @@ The details field can vary across event types, while the common fields have a va
 
 ## Run the script
 
-Connect mongosh to a fresh exercise database and run Chukwuma_Samuel_301910606_P4_MongoDB.js. It selects portfolio_nosql, creates the collection, inserts the sample documents and displays the query results. [Implementation evidence]
+Connect mongosh to a fresh exercise database and run Chukwuma_Samuel_301910606_P4_MongoDB.js. It selects portfolio_nosql, creates the collection, inserts the sample documents and displays the query results. [Implementation evidence]_(portfolio-4-nosql/Chukwuma_Samuel_301910606_P4_DocumentsAndQueries.png)
 
 ## References
 
