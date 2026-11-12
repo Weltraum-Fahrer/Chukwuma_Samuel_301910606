@@ -1,4 +1,4 @@
-# University/Student Result Portal — database design
+# University/Student Result Portal — Database Design
 
 My case study records students, courses, offerings, results.
 
@@ -81,5 +81,5 @@ My case study records students, courses, offerings, results.
 - Each course has a unique course code.
 - A course has at most one offering per term.
 - A student has at most one result per offering.
-- Scores use a 0 to 100 scale, and offering start dates cannot be later than end dates.
+- Scores uses a 0 to 100 score scale, and offering start dates cannot be later than end dates.
 
