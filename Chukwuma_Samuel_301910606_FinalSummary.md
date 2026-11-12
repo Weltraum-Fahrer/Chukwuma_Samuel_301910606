@@ -4,7 +4,7 @@
 
 ## Case study
 
-My case study borders a University/Student Result Portal. I designed the database scenario for students reviewing their recorded results and academic staff recording and correcting results, with separate tables named students, courses, offerings and results. It supports these operations: record a student's result for a course offering; review results by student, course, and term; summarize result counts and average scores.
+My case study borders a University/Student Result Portal. I designed the database scenario for students reviewing their recorded results and academic staff recording and correcting results, with separate tables named students, courses, offerings and results. It supports the following operations: record a student's result for a course offering; review results by student, course, and term; summarize result counts and average scores.
 
 ## Portfolio 1: Database Design and Modelling
 
