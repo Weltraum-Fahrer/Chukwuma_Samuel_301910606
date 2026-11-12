@@ -17,7 +17,7 @@ My case study records students, courses, offerings, results.
 
 | Entity | Information stored |
 | --- | --- |
-| students | Stores a synthetic student surrogate key and minimal enrollment status, without actual names or real-world identifiers. |
+| students | Stores a simulated student surrogate key and minimal enrollment status, without actual names or real-world identifiers. |
 | courses | Stores catalog details shared by term-specific offerings. |
 | offerings | Represents a course scheduled for a specific term, keeping term and date details separate from catalog course data. |
 | results | Stores one student's outcome for an offering; score and recording time belong here, while student, offering, and course attributes are not duplicated. |
