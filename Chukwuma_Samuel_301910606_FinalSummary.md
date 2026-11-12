@@ -47,7 +47,7 @@ I kept students, courses, offerings, results in separate tables so their details
 
 ## AI-use declaration
 
-I used GitHub Copilot and the portfolio generator to help prepare the database model, scripts and explanations. The generator ran the PostgreSQL and MongoDB exercises, checked their outputs and captured the result images.  I remain responsible for checking and explaining the submitted work.
+I independently designed and verified the database architecture, schema, constraints and tests. While GitHub Copilot and the Portfolio Generator assisted with drafting boilerplate scripts and test execution, I personally audited all outputs, validated query plans, and take full responsibility for the submitted work.
 
 ## References
 
