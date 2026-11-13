@@ -1,6 +1,6 @@
 # University/Student Result Portal
 
-Student Name:Samuel Chukwuma · Student ID:301910606
+Student Name: Samuel Chukwuma · Student ID: 301910606
 
 The portfolio uses simulated records for University/Student Result Portal.
 
