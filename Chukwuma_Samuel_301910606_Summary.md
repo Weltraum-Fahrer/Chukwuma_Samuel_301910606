@@ -10,7 +10,7 @@ My case study borders a University/Student Result Portal. I designed the databas
 
 I organised the relational design into 4 tables. Primary keys identify records, foreign keys preserve the links, and checks enforce the stated business rules. An offering's start date must be on or before its end date. The normalisation examples show the sample data at 1NF, 2NF and 3NF. All 13 deliberately invalid inserts were rejected without changing the valid sample rows.
 
-![University/Student Result Portal ER diagram](Chukwuma_Samuel_301910606_ERDiagram.jpeg)
+![University/Student Result Portal ER diagram](images/Chukwuma_Samuel_301910606_ERDiagram.jpeg)
 
 Figure 1. Tables, keys and relationships. PK: primary key; FK: foreign key; UK: unique value.
 
