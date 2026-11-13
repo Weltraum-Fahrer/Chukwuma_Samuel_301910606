@@ -27,4 +27,4 @@ A real deployment would use private networking, authentication, least-privilege 
 - [MongoDB: replication](https://www.mongodb.com/docs/manual/replication/)
 - [MongoDB: sharding](https://www.mongodb.com/docs/manual/sharding/)
 
-![Proposed architecture](screenshots/Chukwuma_Samuel_301910606_P5_ProposedDesign.png)
+![Proposed architecture](Chukwuma_Samuel_301910606_P5_ProposedDesign.jpeg)
